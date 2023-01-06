@@ -1,0 +1,1073 @@
+<!-- eslint-disable -->
+
+
+<!--
+ - @author 김예은
+ - @refactoring 김예은
+-->
+
+
+<template>
+  <!-- START contentWrap-->
+	<div id="contentWrap">
+		<!-- <input type="hidden" :id="like_meet_list" :value="${like_meet_list}">
+		<input type="hidden" :id="like_activity_list" :value="${like_activity_list}"> -->
+
+		<!-- ****************** 모임 추천 ****************** -->
+		<div id="recommendMeet" class="mainContent">
+			<div class="titleSection">
+				<!-- 로그인 전, 추천-->
+				<section class="title titleLeft">
+					<section id="beforeLogin_recommend">
+						<span class="comment">안녕하세요! 현재 가장 인기있는 모임 추천해드려요!</span>
+					</section>
+				</section>
+
+				<section class="title titleLeft">
+					<!-- 로그인 전, 추천-->
+					<th:block th:if="${is_login} == null">
+						<section id="beforeLogin_recommend">
+							<span class="comment">안녕하세요! 현재 가장 인기있는 모임 추천해드려요!</span>
+						</section>
+					</th:block>
+
+					<!-- 로그인 성공 후, 추천 -->
+					<th:block th:unless="${is_login} == null">
+						<input type="hidden" th:value="${user_county}" id="user_county" />
+						<section id="afterLogin_recommend">
+							<span id="nickname">"[[${list.nick_name}]]"님의 </span>
+							<span class="region_comment comment">거주지 주변 모임 추천해드려요!</span>
+						</section>
+					</th:block>
+				</section>
+
+				<section class="title titleRight">
+					<span id="plusBtn_meet" class="plusBtn">+더보기</span>
+				</section>
+			</div>
+
+			<!-- START Meet RECOMMEND SECTION -->
+			<div id="meet_recommendSection">
+				<th:block th:if="${u_list} != null">
+					<th:block th:each="mvo : ${u_list}">
+						<!-- start content_list div-->
+						<div class="content_list meet-list" th:attr="idx=${mvo.meet_no}">
+							<div class="info-list-wrap">
+								<div class="listCommon">
+									<span class="content_title">[[${mvo.meet_name}]]</span>
+								</div>
+
+								<div class="description_list listCommon">
+									<span class="content_description">
+										[[${mvo.meet_info}]]
+									</span>
+								</div>
+
+								<div class="listCommon">
+									<div class="tagSection">
+										<th:block th:if="${mvo.meet_county} != null">
+											<div class="loca_tag tag">
+												<img src="/IMG/common/map.png" class="tag_img">
+												<span class="location_name font_size_10">[[${mvo.meet_county}]]</span>
+											</div>
+										</th:block>
+										<th:block th:if="${mvo.meet_county} == null">
+											<div class="loca_tag tag blind">
+												<img src="/IMG/common/map.png" class="tag_img">
+												<span class="location_name font_size_10"></span>
+											</div>
+										</th:block>
+
+										<th:block th:if="${mvo.meet_interest_name} != null">
+											<div class="cate_tag tag">
+												<span
+													class="category_name font_size_10">[[${mvo.meet_interest_name}]]</span>
+											</div>
+										</th:block>
+										<th:block th:if="${mvo.meet_interest_name} == null">
+											<div class="cate_tag tag blind">
+												<span class="category_name font_size_10"></span>
+											</div>
+										</th:block>
+
+										<th:block th:if="${mvo.meet_gender} != null">
+											<div class="cate_tag tag gender_tag">
+												<th:block th:if="${mvo.meet_gender} == 'W'">
+													<span class="gender font_size_10">여</span>
+												</th:block>
+												<th:block th:if="${mvo.meet_gender} == 'M'">
+													<span class="gender font_size_10">남</span>
+												</th:block>
+											</div>
+										</th:block>
+										<th:block th:if="${mvo.meet_gender} == null">
+											<div class="cate_tag tag gender_tag blind">
+												<span class="gender font_size_10"></span>
+											</div>
+										</th:block>
+									</div>
+								</div>
+
+								<div class="content_img">
+									<img th:src="${mvo.meet_image}" alt="list_img" class="list_img">
+								</div>
+							</div>
+
+							<div class="bottomWrap">
+								<div class="meet_info">
+									<div class="meet_member_info">
+										<span class="member_cnt member_ment">[[${mvo.user_cnt}]]명</span>
+										<span class="member_ment">참여 중</span>
+									</div>
+
+									<th:block th:if="${mvo.meet_age_arr} != null">
+										<!-- 조건있는 모임(조건없을 시 hide 클래스 추가) -->
+										<div class="meet_condition age_condition_wrap">
+											<img src="/IMG/common/line.svg" alt="line이미지" class="divide">
+											<span class="condition_bold condition_common"><b>모집</b></span>
+											<th:block th:each="age : ${mvo.meet_age_arr}">
+												<span
+													class="condition_regular condition_common age_condition">[[${age}]]</span>
+											</th:block>
+										</div>
+									</th:block>
+									<th:block th:if="${mvo.meet_age_arr} == null">
+										<!-- 조건있는 모임(조건없을 시 hide 클래스 추가) -->
+										<div class="meet_condition age_condition_wrap blind">
+											<img src="/IMG/common/line.svg" alt="line이미지" class="divide">
+											<span class="condition_bold condition_common"><b>모집</b></span>
+											<span class="condition_regular condition_common age_condition"></span>
+										</div>
+									</th:block>
+								</div>
+
+								<div class="likeWrap">
+									<section class="heartSection" th:attr="idx=${mvo.meet_no}">
+										<img src="/IMG/common/heart-outlined.svg" alt='라인하트이미지'
+											class="beforeLike_heart heartCommon" />
+										<img src="/IMG/common/heart-filled.svg" alt='풀하트이미지'
+											class="afterLike_heart heartCommon blind" />
+									</section>
+									<span class="likeCnt">[[${mvo.like_cnt}]]</span>
+								</div>
+							</div>
+						</div>
+						<!-- end content_list div -->
+					</th:block>
+				</th:block>
+
+				<th:block th:if="${u_list} == null">
+					<!-- start content_list div-->
+					<!-- idx 줘야함 -->
+					<div class="content_list meet-list blind">
+						<div class="info-list-wrap">
+							<div class="listCommon">
+								<span class="content_title">
+									<!--제목-->
+								</span>
+							</div>
+
+							<div class="description_list listCommon">
+								<span class="content_description">
+									<!--설명-->
+								</span>
+							</div>
+
+							<div class="listCommon">
+								<div class="tagSection">
+									<div class="loca_tag tag">
+										<img src="/IMG/common/map.png" class="tag_img">
+										<span class="location_name font_size_10">
+											<!--지역-->
+										</span>
+									</div>
+
+									<div class="cate_tag tag">
+										<span class="category_name font_size_10">
+											<!--관심사-->
+										</span>
+									</div>
+
+									<div class="gender_tag tag cate_tag">
+										<span class="gender font_size_10">
+											<!--성별-->
+										</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="content_img">
+								<img alt="list_img" class="list_img">
+							</div>
+						</div>
+
+						<div class="bottomWrap">
+							<div class="meet_info">
+								<div class="meet_member_info">
+									<span class="member_cnt member_ment">
+										<!--설명-->명
+									</span>
+									<span class="member_ment">참여 중</span>
+								</div>
+
+								<!-- 조건있는 모임(조건없을 시 hide 클래스 추가) -->
+								<div class="meet_condition age_condition_wrap">
+									<img src="/IMG/common/line.svg" alt="line이미지" class="divide">
+									<span class="condition_bold condition_common"><b>모집</b></span>
+									<span class="condition_regular condition_common age_condition">
+										<!--나이 배열-->
+									</span>
+								</div>
+							</div>
+
+							<div class="likeWrap">
+								<!--아래에 idx-->
+								<section class="heartSection">
+									<img src="/IMG/common/heart-outlined.svg" alt='라인하트이미지'
+										class="beforeLike_heart heartCommon" />
+									<img src="/IMG/common/heart-filled.svg" alt='풀하트이미지'
+										class="afterLike_heart heartCommon blind" />
+								</section>
+								<span class="likeCnt">
+									<!--좋아요-->
+								</span>
+							</div>
+						</div>
+					</div>
+					<!-- end content_list div -->
+				</th:block>
+
+				<th:block th:if="${#lists.size(u_list)} == 0">
+					<div class="no-list-wrap">
+						<img class="no-list-img" src="/IMG/common/blue_warning.svg" alt='파란 경고 이미지' />
+						<p class="no-list-txt">관련된 모임이 존재하지 않습니다.</p>
+					</div>
+				</th:block>
+				<th:block th:if="${#lists.size(u_list)} != 0">
+					<div class="no-list-wrap blind">
+						<img class="no-list-img" src="/IMG/common/blue_warning.svg" alt='파란 경고 이미지' />
+						<p class="no-list-txt">관련된 모임이 존재하지 않습니다.</p>
+					</div>
+				</th:block>
+			</div>
+			<!-- END Meet RECOMMEND SECTION -->
+		</div>
+
+		<!-- ****************** 관심사별 모임 추천 ****************** -->
+		<th:block th:if="${is_login} != null and ${interest_list} != null">
+			<div id="country_recommendMeet" class="mainContent">
+				<div class="titleSection">
+					<section class="title titleLeft">
+						<section id="afterLogin_recommend">
+							<span id="nickname">"[[${list.nick_name}]]"님의 </span>
+							<span class="interest_comment comment">
+								관심사인
+								<select class="user_interest_select">
+									<th:block th:each="interest : ${interest_list.interests}">
+										<option name="user_interest" class="user_interest_li">[[${interest}]]</option>
+									</th:block>
+								</select>
+								와(/과) 관련된 모임 추천해드려요!
+							</span>
+						</section>
+					</section>
+
+					<section class="title titleRight">
+						<span id="plusBtn_meet_interest" class="plusBtn">+더보기</span>
+					</section>
+				</div>
+
+				<!-- START Meet RECOMMEND SECTION -->
+				<div id="interest_meet_recommendSection">
+					<th:block th:if="${interest_meet_list} != null">
+						<th:block th:each="mvo : ${interest_meet_list}">
+							<!-- start content_list div-->
+							<div class="content_list meet-list" th:attr="idx=${mvo.meet_no}">
+								<div class="info-list-wrap">
+									<div class="listCommon">
+										<span class="content_title">[[${mvo.meet_name}]]</span>
+									</div>
+
+									<div class="description_list listCommon">
+										<span class="content_description">
+											[[${mvo.meet_info}]]
+										</span>
+									</div>
+
+									<div class="listCommon">
+										<div class="tagSection">
+											<th:block th:if="${mvo.meet_county} != null">
+												<div class="loca_tag tag">
+													<img src="/IMG/common/map.png" class="tag_img">
+													<span
+														class="location_name font_size_10">[[${mvo.meet_county}]]</span>
+												</div>
+											</th:block>
+											<th:block th:if="${mvo.meet_county} == null">
+												<div class="loca_tag tag blind">
+													<img src="/IMG/common/map.png" class="tag_img">
+													<span class="location_name font_size_10"></span>
+												</div>
+											</th:block>
+
+											<th:block th:if="${mvo.meet_interest_name} != null">
+												<div class="cate_tag tag">
+													<span
+														class="category_name font_size_10">[[${mvo.meet_interest_name}]]</span>
+												</div>
+											</th:block>
+											<th:block th:if="${mvo.meet_interest_name} == null">
+												<div class="cate_tag tag blind">
+													<span class="category_name font_size_10"></span>
+												</div>
+											</th:block>
+
+											<th:block th:if="${mvo.meet_gender} != null">
+												<div class="cate_tag tag gender_tag">
+													<span class="gender font_size_10">[[${mvo.meet_gender}]]</span>
+												</div>
+											</th:block>
+											<th:block th:if="${mvo.meet_gender} == null">
+												<div class="cate_tag tag gender_tag blind">
+													<span class="gender font_size_10"></span>
+												</div>
+											</th:block>
+										</div>
+									</div>
+
+									<div class="content_img">
+										<img th:src="${mvo.meet_image}" alt="list_img" class="list_img">
+									</div>
+								</div>
+
+								<div class="bottomWrap">
+									<div class="meet_info">
+										<div class="meet_member_info">
+											<span class="member_cnt member_ment">[[${mvo.user_cnt}]]명</span>
+											<span class="member_ment">참여 중</span>
+										</div>
+
+										<th:block th:if="${mvo.meet_age_arr} != null">
+											<!-- 조건있는 모임(조건없을 시 hide 클래스 추가) -->
+											<div class="meet_condition age_condition_wrap">
+												<img src="/IMG/common/line.svg" alt="line이미지" class="divide">
+												<span class="condition_bold condition_common"><b>모집</b></span>
+												<th:block th:each="age : ${mvo.meet_age_arr}">
+													<span
+														class="condition_regular condition_common age_condition">[[${age}]]</span>
+												</th:block>
+											</div>
+										</th:block>
+										<th:block th:if="${mvo.meet_age_arr} == null">
+											<!-- 조건있는 모임(조건없을 시 hide 클래스 추가) -->
+											<div class="meet_condition age_condition_wrap blind">
+												<img src="/IMG/common/line.svg" alt="line이미지" class="divide">
+												<span class="condition_bold condition_common"><b>모집</b></span>
+												<span class="condition_regular condition_common age_condition"></span>
+											</div>
+										</th:block>
+									</div>
+
+									<div class="likeWrap">
+										<section class="heartSection" th:attr="idx=${mvo.meet_no}">
+											<img src="/IMG/common/heart-outlined.svg" alt='라인하트이미지'
+												class="beforeLike_heart heartCommon" />
+											<img src="/IMG/common/heart-filled.svg" alt='풀하트이미지'
+												class="afterLike_heart heartCommon blind" />
+										</section>
+										<span class="likeCnt">[[${mvo.like_cnt}]]</span>
+									</div>
+								</div>
+							</div>
+							<!-- end content_list div -->
+						</th:block>
+					</th:block>
+
+					<th:block th:if="${interest_meet_list} == null">
+						<!-- start content_list div-->
+						<!-- idx 줘야함 -->
+						<div class="content_list meet-list blind">
+							<div class="info-list-wrap">
+								<div class="listCommon">
+									<span class="content_title">
+										<!--제목-->
+									</span>
+								</div>
+
+								<div class="description_list listCommon">
+									<span class="content_description">
+										<!--설명-->
+									</span>
+								</div>
+
+								<div class="listCommon">
+									<div class="tagSection">
+										<div class="loca_tag tag">
+											<img src="/IMG/common/map.png" class="tag_img">
+											<span class="location_name font_size_10">
+												<!--지역-->
+											</span>
+										</div>
+
+										<div class="cate_tag tag">
+											<span class="category_name font_size_10">
+												<!--관심사-->
+											</span>
+										</div>
+
+										<div class="gender_tag tag cate_tag">
+											<span class="gender font_size_10">
+												<!--성별-->
+											</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="content_img">
+									<img alt="list_img" class="list_img">
+								</div>
+							</div>
+
+							<div class="bottomWrap">
+								<div class="meet_info">
+									<div class="meet_member_info">
+										<span class="member_cnt member_ment">
+											<!--설명-->명
+										</span>
+										<span class="member_ment">참여 중</span>
+									</div>
+
+									<!-- 조건있는 모임(조건없을 시 hide 클래스 추가) -->
+									<div class="meet_condition age_condition_wrap">
+										<img src="/IMG/common/line.svg" alt="line이미지" class="divide">
+										<span class="condition_bold condition_common"><b>모집</b></span>
+										<span class="condition_regular condition_common age_condition">
+											<!--나이 배열-->
+										</span>
+									</div>
+								</div>
+
+								<div class="likeWrap">
+									<!--아래에 idx-->
+									<section class="heartSection">
+										<img src="/IMG/common/heart-outlined.svg" alt='라인하트이미지'
+											class="beforeLike_heart heartCommon" />
+										<img src="/IMG/common/heart-filled.svg" alt='풀하트이미지'
+											class="afterLike_heart heartCommon blind" />
+									</section>
+									<span class="likeCnt">
+										<!--좋아요-->
+									</span>
+								</div>
+							</div>
+						</div>
+						<!-- end content_list div -->
+					</th:block>
+				</div>
+
+				<th:block th:if="${#lists.size(interest_meet_list)} == 0">
+					<div class="no-list-wrap">
+						<img class="no-list-img" src="/IMG/common/blue_warning.svg" alt='파란 경고 이미지' />
+						<p class="no-list-txt">관련된 모임이 존재하지 않습니다.</p>
+					</div>
+				</th:block>
+				<th:block th:if="${#lists.size(interest_meet_list)} != 0">
+					<div class="no-list-wrap blind">
+						<img class="no-list-img" src="/IMG/common/blue_warning.svg" alt='파란 경고 이미지' />
+						<p class="no-list-txt">관련된 모임이 존재하지 않습니다.</p>
+					</div>
+				</th:block>
+			</div>
+		</th:block>
+
+		<!-- ****************** 카테고리별 액티비티 추천 ****************** -->
+		<div id="recommendAct" class="mainContent">
+			<div class="titleSection">
+				<section class="title titleLeft">
+					<section id="beforeLogin_recommend" class="">
+						<span class="comment">어떤 액티비티에 관심있으신가요?</span>
+					</section>
+				</section>
+
+				<section class="title titleRight">
+					<span id="plusBtn_act" class="plusBtn">+더보기</span>
+				</section>
+			</div>
+
+			<div id="act_recommendSection">
+				<!-- 액티비티 태그 SECTION-->
+				<div id="cate_tag_section">
+					<div id="unfold_tag">
+						<!-- 전체 -->
+						<th:block th:if="${checkCategory} == '전체'">
+							<span class="tagItem check">전체</span>
+						</th:block>
+						<th:block th:unless="${checkCategory} == '전체'">
+							<span class="tagItem">전체</span>
+						</th:block>
+
+						<!-- 취미 -->
+						<th:block th:if="${checkCategory} == '취미'">
+							<span class="tagItem check">취미</span>
+						</th:block>
+						<th:block th:unless="${checkCategory} == '취미'">
+							<span class="tagItem">취미</span>
+						</th:block>
+
+						<!-- 팬클럽 -->
+						<th:block th:if="${checkCategory} == '팬클럽'">
+							<span class="tagItem check">팬클럽</span>
+						</th:block>
+						<th:block th:unless="${checkCategory} == '팬클럽'">
+							<span class="tagItem">팬클럽</span>
+						</th:block>
+
+						<!-- 방송/연예 -->
+						<th:block th:if="${checkCategory} == '방송/연예'">
+							<span class="tagItem check">방송/연예</span>
+						</th:block>
+						<th:block th:unless="${checkCategory} == '방송/연예'">
+							<span class="tagItem">방송/연예</span>
+						</th:block>
+
+						<!-- 스포츠/레저 -->
+						<th:block th:if="${checkCategory} == '스포츠/레저'">
+							<span class="tagItem check">스포츠/레저</span>
+						</th:block>
+						<th:block th:unless="${checkCategory} == '스포츠/레저'">
+							<span class="tagItem">스포츠/레저</span>
+						</th:block>
+
+						<!-- 게임 -->
+						<th:block th:if="${checkCategory} == '게임'">
+							<span class="tagItem check">게임</span>
+						</th:block>
+						<th:block th:unless="${checkCategory} == '게임'">
+							<span class="tagItem">게임</span>
+						</th:block>
+
+						<!-- 만화/애니메이션 -->
+						<th:block th:if="${checkCategory} == '만화/애니메이션'">
+							<span class="tagItem check">만화/애니메이션</span>
+						</th:block>
+						<th:block th:unless="${checkCategory} == '만화/애니메이션'">
+							<span class="tagItem">만화/애니메이션</span>
+						</th:block>
+
+						<!-- 맛집/요리 -->
+						<th:block th:if="${checkCategory} == '맛집/요리'">
+							<span class="tagItem check">맛집/요리</span>
+						</th:block>
+						<th:block th:unless="${checkCategory} == '맛집/요리'">
+							<span class="tagItem">맛집/요리</span>
+						</th:block>
+
+						<!-- 생활정보/인테리어 -->
+						<th:block th:if="${checkCategory} == '생활정보/인테리어'">
+							<span class="tagItem check">생활정보/인테리어</span>
+						</th:block>
+						<th:block th:unless="${checkCategory} == '생활정보/인테리어'">
+							<span class="tagItem">생활정보/인테리어</span>
+						</th:block>
+
+						<span class="tag_plus">
+							<img src="/IMG/common/더보기.svg" alt="더보기 이미지" id="plusImg">
+							<img src="/IMG/main/fold.svg" alt="접기 이미지" id="foldImg" class="blind">
+						</span>
+					</div>
+
+					<div id="fold_tag" class="blind">
+						<ul id="tagUl">
+							<li class="tag_li">
+								<!-- 건강/다이어트 -->
+								<th:block th:if="${checkCategory} == '건강/다이어트'">
+									<span class="tagItem check">건강/다이어트</span>
+								</th:block>
+								<th:block th:unless="${checkCategory} == '건강/다이어트'">
+									<span class="tagItem">건강/다이어트</span>
+								</th:block>
+
+								<!-- 패션/뷰티 -->
+								<th:block th:if="${checkCategory} == '패션/뷰티'">
+									<span class="tagItem check">패션/뷰티</span>
+								</th:block>
+								<th:block th:unless="${checkCategory} == '패션/뷰티'">
+									<span class="tagItem">패션/뷰티</span>
+								</th:block>
+
+								<!-- 여행/캠핑 -->
+								<th:block th:if="${checkCategory} == '여행/캠핑'">
+									<span class="tagItem check">여행/캠핑</span>
+								</th:block>
+								<th:block th:unless="${checkCategory} == '여행/캠핑'">
+									<span class="tagItem">여행/캠핑</span>
+								</th:block>
+
+								<!-- 반려동물/동물 -->
+								<th:block th:if="${checkCategory} == '반려동물/동물'">
+									<span class="tagItem check">반려동물/동물</span>
+								</th:block>
+								<th:block th:unless="${checkCategory} == '반려동물/동물'">
+									<span class="tagItem">반려동물/동물</span>
+								</th:block>
+
+								<!-- 문화/예술 -->
+								<th:block th:if="${checkCategory} == '문화/예술'">
+									<span class="tagItem check">문화/예술</span>
+								</th:block>
+								<th:block th:unless="${checkCategory} == '문화/예술'">
+									<span class="tagItem">문화/예술</span>
+								</th:block>
+
+								<!-- 음악 -->
+								<th:block th:if="${checkCategory} == '음악'">
+									<span class="tagItem check">음악</span>
+								</th:block>
+								<th:block th:unless="${checkCategory} == '음악'">
+									<span class="tagItem">음악</span>
+								</th:block>
+
+								<!-- 어학/외국어 -->
+								<th:block th:if="${checkCategory} == '어학/외국어'">
+									<span class="tagItem check">어학/외국어</span>
+								</th:block>
+								<th:block th:unless="${checkCategory} == '어학/외국어'">
+									<span class="tagItem">어학/외국어</span>
+								</th:block>
+
+								<!-- 취업/자격증 -->
+								<th:block th:if="${checkCategory} == '취업/자격증'">
+									<span class="tagItem check">취업/자격증</span>
+								</th:block>
+								<th:block th:unless="${checkCategory} == '취업/자격증'">
+									<span class="tagItem">취업/자격증</span>
+								</th:block>
+							</li>
+							<li class="tag_li">
+								<!-- 교육/공부 -->
+								<th:block th:if="${checkCategory} == '교육/공부'">
+									<span class="tagItem check">교육/공부</span>
+								</th:block>
+								<th:block th:unless="${checkCategory} == '교육/공부'">
+									<span class="tagItem">교육/공부</span>
+								</th:block>
+
+								<!-- IT/컴퓨터 -->
+								<th:block th:if="${checkCategory} == 'IT/컴퓨터'">
+									<span class="tagItem check">IT/컴퓨터</span>
+								</th:block>
+								<th:block th:unless="${checkCategory} == 'IT/컴퓨터'">
+									<span class="tagItem">IT/컴퓨터</span>
+								</th:block>
+
+								<!-- 인문/과학 -->
+								<th:block th:if="${checkCategory} == '인문/과학'">
+									<span class="tagItem check">인문/과학</span>
+								</th:block>
+								<th:block th:unless="${checkCategory} == '인문/과학'">
+									<span class="tagItem">인문/과학</span>
+								</th:block>
+
+								<!-- 경제/재테크 -->
+								<th:block th:if="${checkCategory} == '경제/재테크'">
+									<span class="tagItem check">경제/재테크</span>
+								</th:block>
+								<th:block th:unless="${checkCategory} == '경제/재테크'">
+									<span class="tagItem">경제/재테크</span>
+								</th:block>
+
+								<!-- 종교/봉사 -->
+								<th:block th:if="${checkCategory} == '종교/봉사'">
+									<span class="tagItem check">종교/봉사</span>
+								</th:block>
+								<th:block th:unless="${checkCategory} == '종교/봉사'">
+									<span class="tagItem">종교/봉사</span>
+								</th:block>
+
+								<!-- 일상/이야기 -->
+								<th:block th:if="${checkCategory} == '일상/이야기'">
+									<span class="tagItem check">일상/이야기</span>
+								</th:block>
+								<th:block th:unless="${checkCategory} == '일상/이야기'">
+									<span class="tagItem">일상/이야기</span>
+								</th:block>
+
+								<!-- 나이/또래모임 -->
+								<th:block th:if="${checkCategory} == '나이/또래모임'">
+									<span class="tagItem check">나이/또래모임</span>
+								</th:block>
+								<th:block th:unless="${checkCategory} == '나이/또래모임'">
+									<span class="tagItem">나이/또래모임</span>
+								</th:block>
+
+							</li>
+							<li class="tag_li">
+								<!-- 친목/모임 -->
+								<th:block th:if="${checkCategory} == '친목/모임'">
+									<span class="tagItem check">친목/모임</span>
+								</th:block>
+								<th:block th:unless="${checkCategory} == '친목/모임'">
+									<span class="tagItem">친목/모임</span>
+								</th:block>
+
+								<!-- 자연/귀농 -->
+								<th:block th:if="${checkCategory} == '자연/귀농'">
+									<span class="tagItem check">자연/귀농</span>
+								</th:block>
+								<th:block th:unless="${checkCategory} == '자연/귀농'">
+									<span class="tagItem">자연/귀농</span>
+								</th:block>
+
+							</li>
+						</ul>
+					</div>
+				</div>
+
+				<div id="recommend_list_wrap">
+					<!-- 액티비티가 존재할 때 -->
+					<th:block th:if="${a_list} != null">
+						<div id="has_a_list">
+							<th:block th:each="avo : ${a_list}">
+								<div class="content_list activity-list" th:attr="idx=${avo.activity_no}">
+									<div class="info-list-wrap">
+										<div class="listCommon">
+											<span class="content_title">[[${avo.activity_name}]]</span>
+										</div>
+
+										<div class="description_list listCommon">
+											<span class="content_description">[[${avo.activity_info}]]</span>
+										</div>
+
+										<div class="listCommon">
+											<div class="tagSection">
+												<th:block th:if="${avo.activity_county} != null">
+													<div class="loca_tag tag">
+														<img src="/IMG/common/map.png" class="tag_img">
+														<span
+															class="location_name font_size_10">[[${avo.activity_county}]]</span>
+													</div>
+												</th:block>
+
+												<th:block th:if="${avo.activity_interest} != null">
+													<div class="cate_tag tag">
+														<span
+															class="category_name font_size_10">[[${avo.activity_interest}]]</span>
+													</div>
+												</th:block>
+											</div>
+										</div>
+
+										<div class="content_img">
+											<img th:src="${avo.activity_image}" alt="list_img" class="list_img">
+										</div>
+									</div>
+
+									<div class="bottomWrap">
+										<div class="meet_info">
+											<div class="meet_member_info">
+												<span class="member_cnt member_ment">[[${avo.user_cnt}]]명</span>
+												<span class="member_ment">참여 중</span>
+											</div>
+
+											<th:block th:if="${avo.activity_age_arr} != null">
+												<!-- 조건있는 모임(조건없을 시 hide 클래스 추가) -->
+												<div class="meet_condition">
+													<img src="/IMG/common/line.svg" alt="line이미지" class="divide">
+													<span class="condition_bold condition_common"><b>모집</b></span>
+													<th:block th:each="age : ${avo.activity_age_arr}">
+														<span
+															class="condition_regular condition_common age_condition">[[${age}]]</span>
+													</th:block>
+												</div>
+											</th:block>
+										</div>
+
+										<div class="likeWrap">
+											<section class="heartSection" th:attr="idx=${avo.activity_no}">
+												<img src="/IMG/common/heart-outlined.svg" alt='라인하트이미지'
+													class="beforeLike_heart heartCommon" />
+												<img src="/IMG/common/heart-filled.svg" alt='풀하트이미지'
+													class="afterLike_heart heartCommon blind" />
+											</section>
+											<span class="likeCnt">[[${avo.like_cnt}]]</span>
+										</div>
+									</div>
+								</div>
+								<!-- end content_list div -->
+							</th:block>
+						</div>
+					</th:block>
+
+					<!-- 액티비티가 존재하지않을 때 -->
+					<th:block th:if="${a_list} == null">
+						<div id="has_a_list">
+							<div class="content_list activity-list">
+								<div class="info-list-wrap">
+									<div class="listCommon">
+										<span class="content_title"></span>
+									</div>
+
+									<div class="description_list listCommon">
+										<span class="content_description"></span>
+									</div>
+
+									<div class="listCommon">
+										<div class="tagSection">
+											<div class="loca_tag tag">
+												<img src="/IMG/common/map.png" class="tag_img">
+												<span class="location_name font_size_10"></span>
+											</div>
+
+											<div class="cate_tag tag">
+												<span class="category_name font_size_10"></span>
+											</div>
+										</div>
+									</div>
+
+									<div class="content_img">
+										<img alt="list_img" class="list_img">
+									</div>
+								</div>
+
+								<div class="bottomWrap">
+									<div class="meet_info">
+										<div class="meet_member_info">
+											<span class="member_cnt member_ment">명</span>
+											<span class="member_ment">참여 중</span>
+										</div>
+
+										<!-- 조건있는 모임(조건없을 시 hide 클래스 추가) -->
+										<div class="meet_condition">
+											<img src="/IMG/common/line.svg" alt="line이미지" class="divide">
+											<span class="condition_bold condition_common"><b>모집</b></span>
+											<span class="condition_regular condition_common age_condition"></span>
+										</div>
+									</div>
+
+									<div class="likeWrap">
+										<section class="heartSection">
+											<img src="/IMG/common/heart-outlined.svg" alt='라인하트이미지' class="beforeLike_heart heartCommon" />
+											<img src="/IMG/common/heart-filled.svg" alt='풀하트이미지' class="afterLike_heart heartCommon blind" />
+										</section>
+										<span class="likeCnt"></span>
+									</div>
+								</div>
+							</div>
+							<!-- end content_list div -->
+						</div>
+					</th:block>
+
+					<!-- 액티비티가 존재하지 않을 때 -->
+					<th:block th:if="${#lists.size(a_list)} == 0">
+						<div class="no-list-wrap">
+							<img class="no-list-img" src="/IMG/common/blue_warning.svg" alt='파란 경고 이미지' />
+							<p class="no-list-txt">해당 카테고리와 관련된 액티비티가 존재하지 않습니다.</p>
+						</div>
+					</th:block>
+					<th:block th:unless="${#lists.size(a_list)} == 0">
+						<div class="no-list-wrap blind">
+							<img class="no-list-img" src="/IMG/common/blue_warning.svg" alt='파란 경고 이미지' />
+							<p class="no-list-txt">해당 카테고리와 관련된 액티비티가 존재하지 않습니다.</p>
+						</div>
+					</th:block>
+				</div>
+				<!-- END recommend_list_wrap -->
+			</div>
+			<!-- end act recommend section -->
+		</div>
+
+		<!-- ****************** 마감 임박 액티비티 추천 ****************** -->
+		<div id="short_deadline_recommendAct" class="mainContent">
+			<div class="titleSection">
+				<section class="title titleLeft">
+					<section id="beforeLogin_recommend" class="">
+						<span class="comment">모집 기간&nbsp;<u>마감 임박</u>인 액티비티 추천드려요~!!</span>
+					</section>
+				</section>
+
+				<section class="title titleRight">
+					<span id="plusBtn_act_short_deadline" class="plusBtn">+더보기</span>
+				</section>
+			</div>
+
+			<div id="act_recommendSection">
+				<div id="recommend_list_wrap">
+					<!-- 액티비티가 존재할 때 -->
+					<th:block th:if="${a_deadline_list} != null">
+						<div id="has_a_list">
+							<th:block th:each="avo : ${a_deadline_list}">
+								<div class="content_list activity-list" th:attr="idx=${avo.activity_no}">
+									<div class="info-list-wrap">
+										<div class="listCommon">
+											<span class="content_title">[[${avo.activity_name}]]</span>
+										</div>
+
+										<div class="description_list listCommon">
+											<span class="content_description">[[${avo.activity_info}]]</span>
+										</div>
+
+										<div class="listCommon">
+											<div class="tagSection">
+												<th:block th:if="${avo.activity_county} != null">
+													<div class="loca_tag tag">
+														<img src="/IMG/common/map.png" class="tag_img">
+														<span
+															class="location_name font_size_10">[[${avo.activity_county}]]</span>
+													</div>
+												</th:block>
+
+												<th:block th:if="${avo.activity_interest} != null">
+													<div class="cate_tag tag">
+														<span
+															class="category_name font_size_10">[[${avo.activity_interest}]]</span>
+													</div>
+												</th:block>
+											</div>
+										</div>
+
+										<div class="content_img">
+											<img th:src="${avo.activity_image}" alt="list_img" class="list_img">
+										</div>
+									</div>
+
+									<div class="bottomWrap">
+										<div class="meet_info">
+											<div class="meet_member_info">
+												<span class="member_cnt member_ment">[[${avo.user_cnt}]]명</span>
+												<span class="member_ment">참여 중</span>
+											</div>
+
+											<th:block th:if="${avo.activity_age_arr} != null">
+												<!-- 조건있는 모임(조건없을 시 hide 클래스 추가) -->
+												<div class="meet_condition">
+													<img src="/IMG/common/line.svg" alt="line이미지" class="divide">
+													<span class="condition_bold condition_common"><b>모집</b></span>
+													<th:block th:each="age : ${avo.activity_age_arr}">
+														<span
+															class="condition_regular condition_common age_condition">[[${age}]]</span>
+													</th:block>
+												</div>
+											</th:block>
+										</div>
+
+										<div class="likeWrap">
+											<section class="heartSection" th:attr="idx=${avo.activity_no}">
+												<img src="/IMG/common/heart-outlined.svg" alt='라인하트이미지'
+													class="beforeLike_heart heartCommon" />
+												<img src="/IMG/common/heart-filled.svg" alt='풀하트이미지'
+													class="afterLike_heart heartCommon blind" />
+											</section>
+											<span class="likeCnt">[[${avo.like_cnt}]]</span>
+										</div>
+									</div>
+								</div>
+								<!-- end content_list div -->
+							</th:block>
+						</div>
+					</th:block>
+
+					<!-- 액티비티가 존재하지않을 때 -->
+					<th:block th:if="${a_deadline_list} == null">
+						<div id="has_a_list">
+							<div class="content_list activity-list">
+								<div class="info-list-wrap">
+									<div class="listCommon">
+										<span class="content_title"></span>
+									</div>
+
+									<div class="description_list listCommon">
+										<span class="content_description"></span>
+									</div>
+
+									<div class="listCommon">
+										<div class="tagSection">
+											<div class="loca_tag tag">
+												<img src="/IMG/common/map.png" class="tag_img">
+												<span class="location_name font_size_10"></span>
+											</div>
+
+											<div class="cate_tag tag">
+												<span class="category_name font_size_10"></span>
+											</div>
+										</div>
+									</div>
+
+									<div class="content_img">
+										<img alt="list_img" class="list_img">
+									</div>
+								</div>
+
+								<div class="bottomWrap">
+									<div class="meet_info">
+										<div class="meet_member_info">
+											<span class="member_cnt member_ment">명</span>
+											<span class="member_ment">참여 중</span>
+										</div>
+
+										<!-- 조건있는 모임(조건없을 시 hide 클래스 추가) -->
+										<div class="meet_condition">
+											<img src="/IMG/common/line.svg" alt="line이미지" class="divide">
+											<span class="condition_bold condition_common"><b>모집</b></span>
+											<span class="condition_regular condition_common age_condition"></span>
+										</div>
+									</div>
+
+									<div class="likeWrap">
+										<section class="heartSection">
+											<img src="/IMG/common/heart-outlined.svg" alt='라인하트이미지' class="beforeLike_heart heartCommon" />
+											<img src="/IMG/common/heart-filled.svg" alt='풀하트이미지' class="afterLike_heart heartCommon blind" />
+										</section>
+										<span class="likeCnt"></span>
+									</div>
+								</div>
+							</div>
+							<!-- end content_list div -->
+						</div>
+					</th:block>
+
+					<!-- 액티비티가 존재하지 않을 때 -->
+					<th:block th:if="${#lists.size(a_deadline_list)} == 0">
+						<div class="no-list-wrap">
+							<img class="no-list-img" src="/IMG/common/blue_warning.svg" alt='파란 경고 이미지' />
+							<p class="no-list-txt">해당 카테고리와 관련된 액티비티가 존재하지 않습니다.</p>
+						</div>
+					</th:block>
+					<th:block th:unless="${#lists.size(a_deadline_list)} == 0">
+						<div class="no-list-wrap blind">
+							<img class="no-list-img" src="/IMG/common/blue_warning.svg" alt='파란 경고 이미지' />
+							<p class="no-list-txt">해당 카테고리와 관련된 액티비티가 존재하지 않습니다.</p>
+						</div>
+					</th:block>
+				</div>
+				<!-- END recommend_list_wrap -->
+			</div>
+		</div>
+	</div>
+</template>
+
+<script>
+export default {
+  name: 'MainView',
+  props: {
+    msg: String,
+  },
+};
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="scss">
+h3 {
+  margin: 40px 0 0;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+}
+</style>
