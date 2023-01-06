@@ -23,22 +23,13 @@
 					</section>
 				</section>
 
+				<!-- 로그인 성공 후, 추천 -->
 				<section class="title titleLeft">
-					<!-- 로그인 전, 추천-->
-					<th:block th:if="${is_login} == null">
-						<section id="beforeLogin_recommend">
-							<span class="comment">안녕하세요! 현재 가장 인기있는 모임 추천해드려요!</span>
-						</section>
-					</th:block>
-
-					<!-- 로그인 성공 후, 추천 -->
-					<th:block th:unless="${is_login} == null">
-						<input type="hidden" th:value="${user_county}" id="user_county" />
-						<section id="afterLogin_recommend">
-							<span id="nickname">"[[${list.nick_name}]]"님의 </span>
-							<span class="region_comment comment">거주지 주변 모임 추천해드려요!</span>
-						</section>
-					</th:block>
+					<input type="hidden" th:value="${user_county}" id="user_county" />
+					<section id="afterLogin_recommend">
+						<span id="nickname">"{{this.list.nick_name}}"님의 </span>
+						<span class="region_comment comment">거주지 주변 모임 추천해드려요!</span>
+					</section>
 				</section>
 
 				<section class="title titleRight">
@@ -1048,26 +1039,16 @@
 <script>
 export default {
   name: 'MainView',
-  props: {
-    msg: String,
+  data() {
+    return {
+      list: '',
+    };
+  },
+  mounted() {
+
+  },
+  methods: {
+
   },
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>

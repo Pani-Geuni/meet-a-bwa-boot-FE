@@ -1,0 +1,77 @@
+.meet-info-wrap {
+  width: 750px;
+  height: 100%;
+  background-color: #ffffff;
+
+  margin-top: 40px;
+}
+
+.meet-info-top {
+  display: flex;
+  align-items: center;
+
+  padding: 40px 32px;
+
+  border-bottom: 1px solid #e4e4e4;
+}
+
+.meet-info-title {
+  font-size: 24px;
+  margin: 0 4px 0 0;
+}
+
+.btn-meet-info {
+  width: 40px;
+  height: 24px;
+  
+  border-radius: 8px;
+  border: none;
+
+  margin-left: 8px;
+  font-size: 12px;
+  
+  cursor: pointer;
+}
+
+#btn-meet-edit {
+	background-color: #ffffff;
+	border: 1px solid #808080;
+}
+
+#btn-meet-remove,
+#btn-meet-exit {
+	background-color: #F86D7D;
+	color: #ffffff;
+}
+
+.meet-info-tag {
+  margin: 20px 32px;
+  border-bottom: 1px solid #e4e4e4;
+}
+
+.meet-info-content {
+  margin: 20px 32px;
+  border-bottom: 1px solid #e4e4e4;
+}
+
+.meet-info-detail {
+  display: flex;
+  flex-direction: column;
+
+  margin: 20px 32px;
+  border-bottom: 1px solid #e4e4e4;
+}
+
+.meet-info-detail p::before {
+  content: '•';
+}
+
+.meet-info-detail p {
+  display: inline-block;
+  width: 15%;
+}
+
+.meet-info-detail span {
+  display: inline !important;
+  font-weight: 700;
+}
