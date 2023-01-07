@@ -6,13 +6,13 @@ const routes = [
   {
     path: '/',
     component: MainLayout,
-    children: [
-      {
-        path: '',
-        name: 'MainView',
-        component: MainView,
-      },
-    ],
+    // children: [
+    //   {
+    //     path: '',
+    //     name: 'MainView',
+    //     component: MainView,
+    //   },
+    // ],
   },
 ];
 
