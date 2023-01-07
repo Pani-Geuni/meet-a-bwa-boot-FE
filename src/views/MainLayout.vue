@@ -1,12 +1,4 @@
 <!-- eslint-disable linebreak-style -->
-<!-- eslint-disable max-len -->
-<!-- eslint-disable no-plusplus -->
-<!-- eslint-disable no-lonely-if -->
-<!-- eslint-disable linebreak-style -->
-<!-- eslint-disable no-plusplus -->
-<!-- eslint-disable array-callback-return -->
-<!-- eslint-disable space-before-blocks -->
-<!-- eslint-disable next-line default-case-->
 <!-- eslint-disable -->
 
 <!--
@@ -18,21 +10,34 @@
   <HeaderView />
 
 	<div id="bodyWrap">
-		<th:block th:replace="thymeleaf/html/common/searchBar :: searchBar"></th:block>
+		<SearchBarView />
 		<router-view></router-view>
 		<FooterView />
 	</div>
+
+  <PopupView />
+  <ToastView />
 </template>
 
 <script>
 import HeaderView from '@/components/common/HeaderView.vue';
 import FooterView from '@/components/common/FooterView.vue';
+import SearchBarView from '@/components/common/SearchBarView.vue';
+import PopupView from '@/components/common/PopupView.vue';
+import ToastView from '@/components/common/ToastView.vue';
 
 export default {
-  name: 'HomeView',
+  name: 'MainLayout',
   components: {
     HeaderView,
+    SearchBarView,
+    PopupView,
+    ToastView,
     FooterView,
   },
 };
 </script>
+
+<style lang="scss">
+  @import '@/assets/CSS/common/common.scss';
+</style>

@@ -6,7 +6,7 @@
 -->
 
 <template>
-  <div id="footerWrap" th:fragment="footer">
+  <div id="footerWrap">
 		<h5>© Golfzon Tech Academy, Inc. All rights reserved.</h5>
 	</div>
 </template>
@@ -16,3 +16,7 @@ export default {
   name: 'FooterView',
 };
 </script>
+
+<style lang="scss" scoped>
+	@import '@/assets/CSS/common/footer.scss'
+</style>
