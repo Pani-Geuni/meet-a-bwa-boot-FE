@@ -125,7 +125,7 @@
 					공용 알러트팝업
 				</span>
 			</section>
-			<section id="common-alert-btn" class="alert-btn-section">
+			<section id="common-alert-btn" class="alert-btn-section" @click="close_common_popup($event.target)">
 				<span>확인</span>
 			</section>
 		</div>
@@ -155,7 +155,24 @@
 </style>
 
 <script>
+import $ from 'jquery';
+
 export default {
   name: 'CommonPopupView',
+  data() {
+    return {
+
+    };
+  },
+  methods: {
+    close_common_popup(target) {
+      if (target.attr('reload')) {
+        target.attr('reload', false);
+        window.location.reload();
+      } else {
+        $('#common-alert-popup-wrap').addClass('blind');
+      }
+    },
+  },
 };
 </script>
