@@ -52,16 +52,15 @@
 							</div>
 						</div>
 
-
 						<div class="bottomWrap">
 							<div class="meet_info">
-								<div v-if="meet.user_cnt !== null" class="meet_member_info">
+								<div v-if="meet.user_cnt !== undefined" class="meet_member_info">
 									<span class="member_cnt member_ment">{{meet.user_cnt}}명</span>
 									<span class="member_ment">참여 중</span>
 								</div>
 
 								<!-- 조건있는 모임(조건없을 시 hide 클래스 추가) -->
-								<div v-if="meet.meet_age !== null" class="meet_condition">
+								<div v-if="meet.meet_age !== undefined" class="meet_condition">
 									<img src="@/assets/IMG/common/line.svg" alt="line이미지" class="divide">
 									<span class="condition_bold condition_common"><b>모집</b></span>
 									<span v-for="age in meet.meet_age_arr" :key="age" class="condition_regular condition_common age_condition"> {{ age }} </span>
@@ -94,6 +93,8 @@
 </style>
 
 <script>
+import $ from 'jquery';
+
 export default {
   name: 'MeetListView',
   data() {

@@ -12,7 +12,7 @@
 		<div id="recommendMeet" class="mainContent">
 			<div class="titleSection">
 				<!-- 로그인 전, 추천-->
-				<section v-if="this.$store.state.isLogin === false" class="title titleLeft">
+				<section v-if="!this.$store.state.isLogin" class="title titleLeft">
 					<section id="beforeLogin_recommend">
 						<span class="comment">안녕하세요! 현재 가장 인기있는 모임 추천해드려요!</span>
 					</section>
@@ -20,7 +20,7 @@
 
 				<!-- 로그인 성공 후, 추천 -->
 				<section class="title titleLeft">
-					<section v-if="this.$store.state.isLogin === true"  id="afterLogin_recommend">
+					<section v-if="this.$store.state.isLogin"  id="afterLogin_recommend">
 						<span id="nickname">"{{ this.list.nick_name }}"님의 </span>
 						<span class="region_comment comment">거주지 주변 모임 추천해드려요!</span>
 					</section>
@@ -32,7 +32,7 @@
 			</div>
 
 			<!-- START Meet RECOMMEND SECTION -->
-			<div id="meet_recommendSection" v-if="this.u_list !== null">
+			<div id="meet_recommendSection" v-if="this.u_list.length > 0">
 				<!-- start content_list div-->
 				<div class="content_list meet-list" v-for="mvo in this.u_list" :key="mvo" :idx="mvo.meet_no">
 					<div class="info-list-wrap">
@@ -76,7 +76,7 @@
 								<span class="member_ment">참여 중</span>
 							</div>
 
-							<div :class="{'meet_condition age_condition_wrap' : mvo.meet_age_arr !== null, 'meet_condition age_condition_wrap hide' : mvo.meet_age_arr === null}">
+							<div :class="{'meet_condition age_condition_wrap' : mvo.meet_age_arr.length > 0, 'meet_condition age_condition_wrap hide' : mvo.meet_age_arr.length === 0}">
 								<img src="@/assets/IMG/common/line.svg" alt="line이미지" class="divide">
 								<span class="condition_bold condition_common"><b>모집</b></span>
 								<span v-for="age in mvo.meet_age_arr" :key="age" class="condition_regular condition_common age_condition"> {{ age }} </span>
@@ -85,8 +85,8 @@
 
 						<div class="likeWrap">
 							<section class="heartSection" :idx="mvo.meet_no">
-								<img src="@/assets/IMG/common/heart-outlined.svg" alt='라인하트이미지' class="beforeLike_heart heartCommon" />
-								<img src="@/assets/IMG/common/heart-filled.svg" alt='풀하트이미지' class="afterLike_heart heartCommon blind" />
+								<img src="@/assets/IMG/common/heart-outlined.svg" @click="meet_addBookMark" alt='라인하트이미지' class="beforeLike_heart heartCommon" />
+								<img src="@/assets/IMG/common/heart-filled.svg" @click="meet_removeBookMark" alt='풀하트이미지' class="afterLike_heart heartCommon blind" />
 							</section>
 							<span class="likeCnt"> {{ mvo.like_cnt }} </span>
 						</div>
@@ -104,7 +104,7 @@
 		<!-- ****************** END 모임 추천 ****************** -->
 
 		<!-- ****************** 관심사별 모임 추천 ****************** -->
-		<div v-if="this.$store.state.isLogin === true && this.interest_list !== null" id="country_recommendMeet" class="mainContent">
+		<div v-if="this.$store.state.isLogin && this.interest_list.length > 0" id="country_recommendMeet" class="mainContent">
 			<div class="titleSection">
 				<section class="title titleLeft">
 					<section id="afterLogin_recommend">
@@ -140,7 +140,7 @@
 						<div class="listCommon">
 							<div class="tagSection">
 								<div :class="{'loca_tag tag' : mvo.meet_county !== null, 'loca_tag tag blind' : mvo.meet_county === null}">
-									<img src="@/assets/IMG/common/map.png" class="tag_img">
+									<img src="@/assets/IMG/common/map.png" class="tag_img" />
 									<span class="location_name font_size_10"> {{ mvo.meet_county }} </span>
 								</div>
 
@@ -175,8 +175,8 @@
 
 							<div class="likeWrap">
 								<section class="heartSection" :idx="mvo.meet_no">
-									<img src="@/assets/IMG/common/heart-outlined.svg" alt='라인하트이미지' class="beforeLike_heart heartCommon" />
-									<img src="@/assets/IMG/common/heart-filled.svg" alt='풀하트이미지' class="afterLike_heart heartCommon blind" />
+									<img src="@/assets/IMG/common/heart-outlined.svg" @click="meet_addBookMark" alt='라인하트이미지' class="beforeLike_heart heartCommon" />
+									<img src="@/assets/IMG/common/heart-filled.svg" @click="meet_removeBookMark" alt='풀하트이미지' class="afterLike_heart heartCommon blind" />
 								</section>
 								<span class="likeCnt"> {{ mvo.like_cnt }} </span>
 							</div>
@@ -297,8 +297,8 @@
 
 								<div class="likeWrap">
 									<section class="heartSection" :idx="avo.activity_no">
-										<img src="@/assets/IMG/common/heart-outlined.svg" alt='라인하트이미지' class="beforeLike_heart heartCommon" />
-										<img src="@/assets/IMG/common/heart-filled.svg" alt='풀하트이미지' class="afterLike_heart heartCommon blind" />
+										<img src="@/assets/IMG/common/heart-outlined.svg" @click="activity_addBookMark" alt='라인하트이미지' class="beforeLike_heart heartCommon" />
+										<img src="@/assets/IMG/common/heart-filled.svg" @click="activity_removeBookMark" alt='풀하트이미지' class="afterLike_heart heartCommon blind" />
 									</section>
 									<span class="likeCnt">{{ avo.like_cnt }}</span>
 								</div>
@@ -373,9 +373,9 @@
 								</div>
 
 								<div class="likeWrap">
-									<section class="heartSection" :idx="avo.activity_no">
-										<img src="@/assets/IMG/common/heart-outlined.svg" alt='라인하트이미지' class="beforeLike_heart heartCommon" />
-										<img src="@/assets/IMG/common/heart-filled.svg" alt='풀하트이미지' class="afterLike_heart heartCommon blind" />
+									<section class="heartSection">
+										<img src="@/assets/IMG/common/heart-outlined.svg" :idx="avo.activity_no" @click="activity_addBookMark($event.target)" alt='라인하트이미지' class="beforeLike_heart heartCommon" />
+										<img src="@/assets/IMG/common/heart-filled.svg" :idx="avo.activity_no" @click="activity_removeBookMark($event.target)" alt='풀하트이미지' class="afterLike_heart heartCommon blind" />
 									</section>
 									<span class="likeCnt">{{ avo.like_cnt }}</span>
 								</div>
@@ -402,6 +402,9 @@
 </style>
 
 <script>
+import $ from 'jquery';
+import axios from 'axios';
+
 export default {
   name: 'MainView',
   data() {
@@ -413,13 +416,189 @@ export default {
       interest_list: [],
       interest_meet_list: [],
       interest_activity_list: [],
+
+      meet_like_flag: true,
+      activity_like_flag: true,
     };
   },
   mounted() {
 
   },
   methods: {
+    check_login() {
+      // 로그인 안되어있을 시 경고 팝업
+      if (!this.$store.state.isLogin) {
+        $('.warning-layer').removeClass('blind');
+        return false;
+      }
+      return true;
+    },
+    /** ************************* */
+    /** ****모임 좋아요 영역***** */
+    /** ************************* */
+    meet_addBookMark(target) {
+      if (this.meet_like_flag) {
+        if (!this.check_login()) {
+          return;
+        }
 
+        // 로딩 화면
+        $('#spinner-wrap').removeClass('blind');
+
+        axios.post('http://localhost:8800/meet-like', {
+          params: {
+            meet_no: target.attr('idx'),
+            user_no: $.cookie.get('user_no'),
+          },
+        }).then((res) => {
+          this.meet_like_flag = true;
+
+          // 로딩 화면 닫기
+          $('#spinner-wrap').addClass('blind');
+
+          if (res.data.result === '1') {
+            target.next('.likeCnt').text(Number(target.next('.likeCnt').text()) + 1);
+            target.find('.beforeLike_heart').addClass('blind');
+            target.find('.afterLike_heart').removeClass('blind');
+          } else {
+            $('#common-alert-popup-wrap').removeClass('blind');
+            $('.common-alert-txt').html('좋아요 추가에 실패하였습니다.');
+          }
+        }).catch(() => {
+          this.meet_like_flag = true;
+
+          // 로딩 화면 닫기
+          $('#spinner-wrap').addClass('blind');
+
+          $('#common-alert-popup-wrap').removeClass('blind');
+          $('.common-alert-txt').html('오류로 인해 좋아요 추가에 실패하였습니다.<br>이용에 불편을 드려 죄송합니다!');
+        });
+      }
+    },
+    meet_removeBookMark(target) {
+      if (this.meet_like_flag) {
+        if (!this.check_login()) {
+          return;
+        }
+
+        // 로딩 화면
+        $('#spinner-wrap').removeClass('blind');
+
+        axios.delete('http://localhost:8800/meet-like', {
+          params: {
+            meet_no: target.attr('idx'),
+            user_no: $.cookie.get('user_no'),
+          },
+        }).then((res) => {
+          this.meet_like_flag = true;
+
+          // 로딩 화면 닫기
+          $('#spinner-wrap').addClass('blind');
+
+          if (res.data.result === '1') {
+            target.next('.likeCnt').text(Number(target.next('.likeCnt').text()) - 1);
+            target.find('.beforeLike_heart').removeClass('blind');
+            target.find('.afterLike_heart').addClass('blind');
+          } else {
+            $('#common-alert-popup-wrap').removeClass('blind');
+            $('.common-alert-txt').html('좋아요 삭제에 실패하였습니다.');
+          }
+        }).catch(() => {
+          this.meet_like_flag = true;
+
+          // 로딩 화면 닫기
+          $('#spinner-wrap').addClass('blind');
+
+          $('#common-alert-popup-wrap').removeClass('blind');
+          $('.common-alert-txt').html('오류로 인해 좋아요 삭제에 실패하였습니다.<br>이용에 불편을 드려 죄송합니다!');
+        });
+      }
+    },
+    /** ****************************** */
+    /** **** 액티비티 좋아요 영역 ***** */
+    /** ****************************** */
+    activity_addBookMark(target) {
+      if (this.activity_like_flag) {
+        if (!this.check_login()) {
+          return;
+        }
+
+        // 로딩 화면
+        $('#spinner-wrap').removeClass('blind');
+
+        const tmp_this = $(this);
+
+        $.ajax({
+          url: '/main_activity_like_insert',
+          type: 'GET',
+          dataType: 'json',
+          data: {
+            activity_no: $(this).attr('idx'),
+            user_no: $.cookie('user_no'),
+          },
+          success(res) {
+            // 로딩 화면 닫기
+            $('#spinner-wrap').addClass('blind');
+
+            if (res.result == '1') {
+              tmp_this.next('.likeCnt').text(Number(tmp_this.next('.likeCnt').text()) + 1);
+              tmp_this.find('.beforeLike_heart').addClass('blind');
+              tmp_this.find('.afterLike_heart').removeClass('blind');
+            } else {
+              $('#common-alert-popup-wrap').removeClass('blind');
+              $('.common-alert-txt').html('좋아요 추가에 실패하였습니다.');
+            }
+          },
+          error() {
+            // 로딩 화면 닫기
+            $('#spinner-wrap').addClass('blind');
+
+            $('#common-alert-popup-wrap').removeClass('blind');
+            $('.common-alert-txt').html('오류로 인해 좋아요 추가에 실패하였습니다.<br>이용에 불편을 드려 죄송합니다!');
+          },
+        });
+      }
+    },
+    activity_removeBookMark(target) {
+      if (!this.check_login()) {
+        return;
+      }
+
+      // 로딩 화면
+      $('#spinner-wrap').removeClass('blind');
+
+      const tmp_this = $(this);
+
+      $.ajax({
+        url: '/main_activity_like_delete',
+        type: 'GET',
+        dataType: 'json',
+        data: {
+          activity_no: $(this).attr('idx'),
+          user_no: $.cookie('user_no'),
+        },
+        success(res) {
+          // 로딩 화면 닫기
+          $('#spinner-wrap').addClass('blind');
+
+          if (res.result == '1') {
+            tmp_this.next('.likeCnt').text(Number(tmp_this.next('.likeCnt').text()) - 1);
+            tmp_this.find('.beforeLike_heart').removeClass('blind');
+            tmp_this.find('.afterLike_heart').addClass('blind');
+          } else {
+            $('#common-alert-popup-wrap').removeClass('blind');
+            $('.common-alert-txt').html('좋아요 삭제에 실패하였습니다.');
+          }
+        },
+        error() {
+          // 로딩 화면 닫기
+          $('#spinner-wrap').addClass('blind');
+
+          $('#common-alert-popup-wrap').removeClass('blind');
+          $('.common-alert-txt').html('오류로 인해 좋아요 삭제에 실패하였습니다.<br>이용에 불편을 드려 죄송합니다!');
+        },
+      });
+    },
   },
 };
 </script>
